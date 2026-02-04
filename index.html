@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item Shelf Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .box {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        button {
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h1>📦 Item Shelf Manager</h1>
+
+<div class="box">
+    <h3>➕ List Item</h3>
+    <input id="code" placeholder="Item Code">
+    <input id="name" placeholder="Item Name">
+    <input id="shelf" placeholder="Shelf Number">
+    <button onclick="addItem()">Add Item</button>
+</div>
+
+<div class="box">
+    <h3>❌ Delist Item</h3>
+    <input id="deleteInput" placeholder="Enter Code or Name">
+    <button onclick="deleteItem()">Delete Item</button>
+</div>
+
+<div class="box">
+    <h3>🔍 Search Item</h3>
+    <input id="searchInput" placeholder="Enter Code or Name">
+    <button onclick="searchItem()">Search</button>
+    <div class="result" id="searchResult"></div>
+</div>
+
+<script>
+    let items = JSON.parse(localStorage.getItem("items")) || [];
+
+    function saveItems() {
+        localStorage.setItem("items", JSON.stringify(items));
+    }
+
+    function addItem() {
+        const code = document.getElementById("code").value.trim();
+        const name = document.getElementById("name").value.trim();
+        const shelf = document.getElementById("shelf").value.trim();
+
+        if (!code || !name || !shelf) {
+            alert("Please fill all fields");
+            return;
+        }
+
+        items.push({ code, name, shelf });
+        saveItems();
+
+        alert("Item added successfully!");
+        document.getElementById("code").value = "";
+        document.getElementById("name").value = "";
+        document.getElementById("shelf").value = "";
+    }
+
+    function deleteItem() {
+        const input = document.getElementById("deleteInput").value.trim();
+
+        const originalLength = items.length;
+        items = items.filter(item =>
+            item.code !== input && item.name.toLowerCase() !== input.toLowerCase()
+        );
+
+        if (items.length === originalLength) {
+            alert("Item not found");
+        } else {
+            saveItems();
+            alert("Item deleted");
+        }
+
+        document.getElementById("deleteInput").value = "";
+    }
+
+    function searchItem() {
+        const input = document.getElementById("searchInput").value.trim().toLowerCase();
+        const resultDiv = document.getElementById("searchResult");
+
+        const item = items.find(item =>
+            item.code.toLowerCase() === input ||
+            item.name.toLowerCase() === input
+        );
+
+        if (item) {
+            resultDiv.innerText =
+                `Item: ${item.name} | Code: ${item.code} | Shelf: ${item.shelf}`;
+        } else {
+            resultDiv.innerText = "Item not found";
+        }
+    }
+</script>
+
+</body>
+</html>
