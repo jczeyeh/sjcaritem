@@ -61,38 +61,7 @@
     <h3>🔍 Search Item</h3>
     <input id="searchInput" placeholder="Enter Code or Name">
     <button onclick="searchItem()">Search</button>
-function searchItem() {
-    const input = document
-        .getElementById("searchInput")
-        .value
-        .trim()
-        .toLowerCase();
-
-    const resultDiv = document.getElementById("searchResult");
-    resultDiv.innerHTML = "";
-
-    if (!input) {
-        resultDiv.innerText = "Please enter a search term";
-        return;
-    }
-
-    const results = items.filter(item =>
-        item.code.toLowerCase().startsWith(input) ||
-        item.name.toLowerCase().startsWith(input)
-    );
-
-    if (results.length === 0) {
-        resultDiv.innerText = "No matching items found";
-        return;
-    }
-
-    results.forEach(item => {
-        const line = document.createElement("div");
-        line.innerText =
-            `Item: ${item.name} | Code: ${item.code} | Shelf: ${item.shelf}`;
-        resultDiv.appendChild(line);
-    });
-}
+<div class="result" id="searchResult"></div>
 
 </div>
 
