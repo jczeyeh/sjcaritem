@@ -43,18 +43,34 @@ function deleteItem() {
 }
 
 function searchItem() {
-    const input = document.getElementById("searchInput").value.trim().toLowerCase();
-    const result = document.getElementById("searchResult");
+    const input = document
+        .getElementById("searchInput")
+        .value
+        .trim()
+        .toLowerCase();
 
-    const item = items.find(item =>
-        item.code.toLowerCase() === input ||
-        item.name.toLowerCase() === input
+    const resultDiv = document.getElementById("searchResult");
+    resultDiv.innerHTML = "";
+
+    if (!input) {
+        resultDiv.innerText = "Please enter a search term";
+        return;
+    }
+
+    const results = items.filter(item =>
+        item.code.toLowerCase().startsWith(input) ||
+        item.name.toLowerCase().startsWith(input)
     );
 
-    if (item) {
-        result.innerText =
-            `Item: ${item.name} | Code: ${item.code} | Shelf: ${item.shelf}`;
-    } else {
-        result.innerText = "Item not found";
+    if (results.length === 0) {
+        resultDiv.innerText = "No matching items found";
+        return;
     }
+
+    results.forEach(item => {
+        const line = document.createElement("div");
+        line.innerText =
+            `Item: ${item.name} | Code: ${item.code} | Shelf: ${item.shelf}`;
+        resultDiv.appendChild(line);
+    });
 }
